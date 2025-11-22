@@ -1,40 +1,677 @@
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Button Web Page</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-  }
-  .notification {
-    display: flex;
-    align-items: center;
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-  .notification img {
-    width: 24px;
-    margin-right: 8px;
-  }
-  .button-row {
-    display: flex;
-    justify-content: space-around;
-    margin: 20px 0;
-  }
-  .btn {
-    text-align: center;
-    cursor: pointer;
-  }
-  .btn img {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 6px;
-  }
-  .btn span {
-    font-size: 14px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XTX Crypto App - Master Version</title>
+    <!-- Sinhala Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-blue: #4318FF;
+            --header-blue: #0052cc; /* Solid blue for standard headers */
+            --header-gradient: linear-gradient(to right, #00e0ff, #0080ff); /* Cyan gradient */
+            --bg-grey: #f0f2f5;
+            --text-dark: #333;
+            --purple-btn: #4e0eff;
+            --gold: #daa520;
+            --green: #28a745;
+            --red: #dc3545;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans Sinhala', sans-serif;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            user-select: none; 
+        }
+
+        /* --- MAIN CONTAINER --- */
+        .app-container {
+            width: 100%;
+            max-width: 414px; /* Mobile width */
+            background-color: #fff;
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 80px; /* Space for bottom nav */
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow-x: hidden;
+        }
+
+        /* --- PAGE TRANSITIONS --- */
+        .page { display: none; animation: fadeIn 0.25s ease-in-out; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- COMMON STYLES --- */
+        .blue-header {
+            background-color: var(--header-blue);
+            color: white; padding: 15px; display: flex; align-items: center;
+            font-size: 1.1rem; font-weight: 600; position: sticky; top: 0; z-index: 50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .blue-header i { margin-right: 15px; cursor: pointer; font-size: 1.2rem; }
+        
+        .section-pad { padding: 15px; }
+
+        /* --- 1. HOME PAGE --- */
+        .banner { width: 100%; height: 200px; background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%); position: relative; }
+        .banner img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .notification-bar { padding: 12px 15px; display: flex; align-items: center; gap: 10px; background: #fff; border-bottom: 1px solid #f0f0f0; }
+        .notification-bar i { color: var(--primary-blue); }
+        .notification-bar span { font-size: 0.85rem; color: #555; font-weight: 500; }
+
+        .action-grid { display: flex; justify-content: space-between; padding: 15px; background: #fff; }
+        .action-item { display: flex; flex-direction: column; align-items: center; width: 18%; cursor: pointer; }
+        .action-item:active { transform: scale(0.95); }
+        .icon-box { width: 45px; height: 45px; border: 2px solid var(--primary-blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--primary-blue); font-size: 1.2rem; }
+        .action-item span { font-size: 0.7rem; color: #000; text-align: center; line-height: 1.2; }
+
+        .main-cta { margin: 10px 20px 20px; height: 55px; background-color: var(--primary-blue); border-radius: 10px; width: calc(100% - 40px); border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(67, 24, 255, 0.3); }
+        
+        .crypto-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 0 20px 20px; margin-bottom: 20px; }
+        .crypto-item { display: flex; align-items: center; justify-content: center; gap: 5px; font-weight: 600; font-size: 0.8rem; color: #666; }
+
+        /* --- 2. PRODUCTION PAGE --- */
+        .prod-banner { background: linear-gradient(to bottom, #6af, #bdf); padding: 15px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color: #000; font-size: 0.9rem; margin-bottom: 15px; }
+        .prod-stats { display: flex; justify-content: space-around; margin-top: 15px; }
+        .prod-stat-item h2 { font-size: 1.2rem; margin: 0; }
+        .prod-stat-item span { font-size: 0.75rem; color: #444; }
+
+        .prod-card {
+            background: #e0f7fa; /* Light Cyan Bg */
+            margin: 15px; padding: 15px; border-radius: 15px;
+            display: flex; gap: 15px; position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .prod-img-box { width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .prod-img-box img { width: 50px; height: 50px; object-fit: contain; }
+        .prod-info h3 { font-size: 0.95rem; margin-bottom: 5px; color: #000; }
+        .prod-info p { font-size: 0.8rem; margin-bottom: 3px; color: #555; }
+        .prod-price { color: #d48806; font-weight: bold; }
+        .buy-badge { position: absolute; top: 15px; right: 15px; background: #4e0eff; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; cursor: pointer; }
+
+        /* --- 3. SHARE PAGE --- */
+        .share-header {
+            background: linear-gradient(180deg, #56ccf2 0%, #ffffff 100%);
+            padding: 25px; text-align: center; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
+        }
+        .invite-code { font-size: 1.8rem; font-weight: bold; margin: 10px 0; color: #000; }
+        .share-link-box { background: rgba(255,255,255,0.8); border: 1px solid #ddd; padding: 10px; border-radius: 8px; font-size: 0.75rem; color: #555; margin-top: 15px; word-break: break-all; }
+        
+        .team-levels { display: flex; justify-content: space-around; margin: 20px 0; }
+        .level-circle { width: 65px; height: 65px; background: #4318FF; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; margin: 0 auto 5px; border: 3px solid #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+        .level-text { font-size: 0.75rem; text-align: center; color: #333; }
+
+        .rules-list { padding: 20px; }
+        .rule-item { display: flex; gap: 10px; margin-bottom: 15px; }
+        .rule-item i { color: var(--green); font-size: 1.1rem; margin-top: 2px; }
+        .rule-item p { font-size: 0.85rem; color: #555; line-height: 1.4; }
+
+        /* --- 4. PROFILE PAGE --- */
+        .profile-top { background: linear-gradient(180deg, #6ec1e4 0%, #ffffff 100%); padding: 20px; text-align: center; }
+        .user-phone { font-size: 1.3rem; font-weight: bold; color: white; margin: 10px 0; text-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .balance-card {
+            background: linear-gradient(90deg, #4318FF 0%, #9d4eff 100%);
+            border-radius: 15px; padding: 20px; color: white;
+            box-shadow: 0 8px 20px rgba(67, 24, 255, 0.25); margin-bottom: 25px;
+        }
+        .balance-amt { font-size: 1.8rem; font-weight: bold; }
+        
+        .profile-actions { display: flex; justify-content: space-around; margin-bottom: 20px; }
+        .p-act { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .p-act i { font-size: 1.6rem; color: #005fa3; margin-bottom: 5px; }
+        .p-act span { font-size: 0.8rem; font-weight: 600; color: #333; }
+
+        .profile-banner { width: 100%; border-radius: 10px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        
+        .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 10px; }
+        .srv-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; }
+        .srv-item i { font-size: 1.8rem; color: #005fa3; margin-bottom: 8px; }
+        .srv-item span { font-size: 0.8rem; color: #333; }
+
+        /* --- 5. DEPOSIT PAGE --- */
+        .deposit-header { height: 160px; background: var(--header-gradient); border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; padding: 20px; color: #000; text-align: center; position: relative; }
+        .amt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+        .amt-btn { background: white; border: 1px solid #ccc; padding: 12px; border-radius: 6px; font-size: 1rem; font-weight: 500; cursor: pointer; }
+        .amt-btn.selected { background: #000; color: white; border-color: #000; }
+        .custom-input { width: 100%; padding: 12px; border: 1px solid #333; border-radius: 6px; font-size: 1.1rem; outline: none; margin-bottom: 15px; }
+        .pay-btn { width: 100%; background: #3a0ca3; color: white; padding: 14px; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-bottom: 20px; }
+        .notes { font-size: 0.8rem; color: #777; line-height: 1.5; }
+
+        /* --- 6. BANK PAGE --- */
+        .bank-header { background: #333; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .warning-box { color: var(--red); font-size: 0.85rem; margin: 15px 0; font-weight: 600; }
+        .bank-details { border: 1px solid #eee; border-radius: 10px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .bd-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f9f9f9; font-size: 0.9rem; }
+        .bd-val { color: blue; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .copy-btn-sm { cursor: pointer; color: #333; }
+        .upload-area { border: 2px dashed #ccc; background: #fafafa; width: 100px; height: 100px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-top: 10px; cursor: pointer; }
+        .confirm-btn { width: 100%; background: #999; color: white; padding: 14px; border-radius: 30px; border: none; font-weight: bold; margin-top: 20px; cursor: not-allowed; }
+        .confirm-btn.active { background: #3a0ca3; cursor: pointer; }
+
+        /* --- 7. WITHDRAW PAGE --- */
+        .withdraw-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin-top: 20px; background: #fff; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        .form-field { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; background: #f9f9f9; margin-bottom: 15px; outline: none; }
+        .black-action-btn { width: 100%; background: #000; color: white; padding: 12px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; }
+
+        /* --- 8. CUSTOMER SERVICE PAGE --- */
+        .cs-banner { background: #87ceeb; padding: 20px; text-align: center; height: 140px; display: flex; align-items: center; justify-content: center; }
+        .cs-pill { background: white; padding: 8px 20px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .cs-link { border: 1px solid #eee; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin: 15px 0; cursor: pointer; }
+        .cs-left { display: flex; align-items: center; gap: 15px; font-weight: 500; font-size: 0.95rem; }
+        .tg-circle { width: 40px; height: 40px; background: #29b6f6; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+
+        /* --- 9. RECORDS PAGE --- */
+        .rec-item { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee; align-items: flex-start; }
+        .rec-title { font-size: 0.95rem; color: #333; margin-bottom: 4px; }
+        .rec-date { font-size: 0.75rem; color: #888; }
+        .rec-amt { font-weight: bold; font-size: 1rem; text-align: right; }
+        .rec-bal { font-size: 0.8rem; color: #666; text-align: right; margin-top: 2px; }
+        .plus { color: var(--green); }
+        .minus { color: var(--red); }
+
+        /* --- LOADING MODAL --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: center; justify-content: center; }
+        .loading-box { background: #3a0ca3; padding: 25px 50px; border-radius: 12px; color: white; font-weight: 500; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { position: fixed; bottom: 0; max-width: 414px; width: 100%; height: 70px; background: white; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; cursor: pointer; width: 25%; height: 100%; transition: 0.2s; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+        .nav-item span { font-size: 0.7rem; }
+        .nav-item.active { color: var(--header-blue); }
+
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- ================= 1. HOME PAGE ================= -->
+    <div id="page-home" class="page active">
+        <div class="banner">
+            <!-- Using a placeholder that looks like the NFT banner -->
+            <img src="https://placehold.co/400x200/4318FF/FFFFFF?text=NFT+Marketing+Banner" alt="Banner">
+        </div>
+        
+        <div class="notification-bar">
+            <i class="fa-regular fa-bell"></i>
+            <span>16 පුරවන්න LKR 2500</span>
+        </div>
+
+        <div class="action-grid">
+            <div class="action-item" onclick="openPage('deposit')">
+                <div class="icon-box"><i class="fa-solid fa-wallet"></i></div>
+                <span>තැන්පතු</span>
+            </div>
+            <div class="action-item" onclick="openPage('withdraw')">
+                <div class="icon-box"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <span>ආපසු<br>ගැනීම</span>
+            </div>
+            <div class="action-item" onclick="openPage('service')">
+                <div class="icon-box"><i class="fa-regular fa-circle-question"></i></div>
+                <span>උදව්</span>
+            </div>
+            <div class="action-item">
+                <div class="icon-box"><i class="fa-solid fa-download"></i></div>
+                <span>බාගැනීම</span>
+            </div>
+            <div class="action-item">
+                <div class="icon-box"><i class="fa-solid fa-clipboard-check"></i></div>
+                <span>ඇතුළත්<br>වීම</span>
+            </div>
+        </div>
+
+        <button class="main-cta" onclick="openPage('deposit')"></button>
+
+        <div class="crypto-grid">
+            <div class="crypto-item"><span style="color:#F3BA2F; margin-right:4px;"><i class="fa-brands fa-btc"></i></span> <span>BINANCE</span></div>
+            <div class="crypto-item"><span style="color:#3c3c3d; margin-right:4px;"><i class="fa-brands fa-ethereum"></i></span> <span>ethereum</span></div>
+            <div class="crypto-item"><span>BITMAIN</span></div>
+            <div class="crypto-item"><span style="color:#FF0013; margin-right:4px;"><i class="fa-solid fa-diamond"></i></span> <span>TRON</span></div>
+            <div class="crypto-item"><span style="color:#26A17B; margin-right:4px;"><i class="fa-solid fa-t"></i></span> <span>tether</span></div>
+            <div class="crypto-item"><span style="color:#0052FF; margin-right:4px;"><i class="fa-solid fa-c"></i></span> <span>coinbase</span></div>
+        </div>
+    </div>
+
+    <!-- ================= 2. PRODUCTION PAGE ================= -->
+    <div id="page-production" class="page">
+        <div class="prod-banner">
+            <i class="fa-solid fa-hand-point-right" style="color:#d48806; margin-right:5px;"></i>
+            කෘතිම බුද්ධියෙන් කළමනාකරණය වන අතර... (AI Automation)
+            
+            <div class="prod-stats">
+                <div class="prod-stat-item">
+                    <h2>1</h2><span>මගේ උපකරණ</span>
+                </div>
+                <div class="prod-stat-item">
+                    <h2>LKR 0</h2><span>සමස්ත ආදායම</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 1 -->
+        <div class="prod-card">
+            <div class="buy-badge">මිලදී ගන්න</div>
+            <div class="prod-img-box">
+                <img src="https://placehold.co/50x50/22ccff/ffffff?text=AI" alt="AI">
+            </div>
+            <div class="prod-info">
+                <h3>බෝනස් කොන්ත්‍රාත්තුව</h3>
+                <p class="prod-price">මිල : LKR 10</p>
+                <p>වලංගු කාලය : 3 දින</p>
+                <p>දෛනික ආදායම : LKR 5.00</p>
+                <p>සමස්ත ආදායම : LKR 15</p>
+            </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="prod-card">
+            <div class="buy-badge">මිලදී ගන්න</div>
+            <div class="prod-img-box">
+                <img src="https://placehold.co/50x50/22ccff/ffffff?text=S1" alt="S1">
+            </div>
+            <div class="prod-info">
+                <h3>ස්මාර්ට් කොන්ත්‍රාත්තුව 01</h3>
+                <p class="prod-price">මිල : LKR 500</p>
+                <p>වලංගු කාලය : 90 දින</p>
+                <p>දෛනික ආදායම : LKR 50.00</p>
+                <p>සමස්ත ආදායම : LKR 4,500</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 3. SHARE PAGE ================= -->
+    <div id="page-share" class="page">
+        <div class="share-header">
+            <p>ඔබට එක් ක්ලික් කිරීමකින්...</p>
+            <div class="invite-code">351ad21b</div>
+            <p>ආරාධනා කේතය</p>
+            <button style="background:#4e0eff; color:white; border:none; padding:5px 15px; border-radius:20px; margin-top:5px; cursor:pointer;" onclick="alert('Code Copied!')">පිටපත්</button>
+
+            <div class="share-link-box">
+                https://xtx-xax.cloud/login/register?code=351ad21b
+                <div style="text-align:right; margin-top:5px;">
+                     <button style="background:#4e0eff; color:white; border:none; padding:4px 12px; border-radius:15px; font-size:0.7rem; cursor:pointer;" onclick="alert('Link Copied!')">පිටපත්</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="team-levels">
+            <div>
+                <div class="level-circle">LV1</div>
+                <div class="level-text">30%<br>කොමිස්</div>
+            </div>
+            <div>
+                <div class="level-circle">LV2</div>
+                <div class="level-text">5%<br>කොමිස්</div>
+            </div>
+            <div>
+                <div class="level-circle">LV3</div>
+                <div class="level-text">2%<br>කොමිස්</div>
+            </div>
+        </div>
+
+        <div class="rules-list">
+            <h4 style="margin-bottom:15px;">ආරාධනා ප්‍රසාද ක්‍රමය</h4>
+            <div class="rule-item">
+                <i class="fa-solid fa-square-check"></i>
+                <p>1-උපදෙස් මට්ටම (ඔබ සෘජුව ආරාධනා කළ මිතුරන්):<br>ආයෝජනයේ 30% ප්‍රසාද</p>
+            </div>
+            <div class="rule-item">
+                <i class="fa-solid fa-square-check"></i>
+                <p>2-උපදෙස් මට්ටම:<br>ආයෝජනයේ 5% ප්‍රසාද</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 4. PROFILE PAGE ================= -->
+    <div id="page-profile" class="page">
+        <div class="profile-top">
+            <div style="color:white; font-size:0.8rem; opacity:0.8;">MARKETS</div>
+            <div class="user-phone">+94 719888273</div>
+            
+            <div class="balance-card">
+                <div class="balance-amt">LKR 0.00</div>
+                <div style="opacity:0.9; font-size:0.9rem;">ගිණුම් ශේෂය</div>
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <div class="p-act" onclick="openPage('deposit')">
+                <i class="fa-solid fa-wallet"></i><span>තැන්පතු</span>
+            </div>
+            <div class="p-act" onclick="openPage('records')">
+                <i class="fa-solid fa-circle-dollar-to-slot"></i><span>වාර්තාව</span>
+            </div>
+            <div class="p-act">
+                <i class="fa-regular fa-newspaper"></i><span>ඇතුළත් වීම</span>
+            </div>
+        </div>
+
+        <div class="section-pad">
+            <div class="profile-banner">
+                <img src="https://placehold.co/380x120/333/FFF?text=Interior+Design+Ad" style="width:100%; display:block;">
+            </div>
+
+            <h3 style="font-weight:500; margin-bottom:10px; color:#333;">මගේ සේවා</h3>
+            
+            <div class="service-grid">
+                <div class="srv-item" onclick="openPage('service')">
+                    <i class="fa-regular fa-comment-dots"></i><span>අප ගැන</span>
+                </div>
+                <div class="srv-item">
+                    <i class="fa-solid fa-book-open"></i><span>වේදිකා නීති</span>
+                </div>
+                <div class="srv-item" onclick="openPage('service')">
+                    <i class="fa-regular fa-circle-question"></i><span>උදව්</span>
+                </div>
+                <div class="srv-item" onclick="openPage('withdraw')">
+                    <i class="fa-regular fa-credit-card"></i><span>බැංකු තොරතුරු</span>
+                </div>
+                <div class="srv-item">
+                    <i class="fa-solid fa-lock"></i><span>මුරපදය</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 5. CUSTOMER SERVICE PAGE ================= -->
+    <div id="page-service" class="page">
+        <div class="blue-header">
+            <i class="fa-solid fa-chevron-left" onclick="openPage('home')"></i>
+            පාරිභෝගික සේවය
+        </div>
+        <div class="cs-banner">
+            <div class="cs-pill">පාරිභෝගික සේවා මාර්ගගත සේවා වේලාවන්</div>
+        </div>
+        <div class="section-pad">
+            <div class="cs-link">
+                <div class="cs-left">
+                    <div class="tg-circle"><i class="fa-brands fa-telegram"></i></div>
+                    <span>මාර්ගගත පාරිභෝගික සේවය</span>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color:#999;"></i>
+            </div>
+
+            <div class="cs-link">
+                <div class="cs-left">
+                    <div class="tg-circle"><i class="fa-brands fa-telegram"></i></div>
+                    <span>නිල නාලිකාව</span>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color:#999;"></i>
+            </div>
+
+            <div style="background:white; padding:20px; border-radius:10px; border:1px solid #eee; text-align:center; margin-top:20px;">
+                <h3 style="margin-bottom:10px;">9:00-19:00</h3>
+                <p style="font-weight:bold; margin-bottom:10px;">මාර්ගගත පාරිභෝගික සේවා වේලාවන්</p>
+                <p style="font-size:0.8rem; color:#666; text-align:left; line-height:1.5;">
+                    1. අපගේ වේදිකාව පිළිබඳ ඕනෑම ප්‍රශ්නයක් සඳහා...<br>
+                    2. පණිවිඩයට වහාම ප්‍රතිචාර දැක්වීමට නොහැකි නම්...<br>
+                    3. මුරපදය කිසිවෙකුට හෙළි නොකරන්න...
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 6. DEPOSIT PAGE ================= -->
+    <div id="page-deposit" class="page">
+        <div class="deposit-header">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <i class="fa-solid fa-chevron-left" onclick="openPage('home')" style="font-size:1.5rem; cursor:pointer;"></i>
+                <i class="fa-regular fa-clock" style="font-size:1.2rem; color:white;"></i>
+            </div>
+            <h2 style="font-size:1.5rem;">තැන්පතු</h2>
+            <p style="margin-top:5px;">නැවත ආරෝපණය කිරීමේ මුදල</p>
+        </div>
+        <div class="section-pad">
+            <div class="amt-grid">
+                <button class="amt-btn selected" onclick="selectAmount(500, this)">500</button>
+                <button class="amt-btn" onclick="selectAmount(800, this)">800</button>
+                <button class="amt-btn" onclick="selectAmount(1500, this)">1500</button>
+                <button class="amt-btn" onclick="selectAmount(4500, this)">4500</button>
+                <button class="amt-btn" onclick="selectAmount(12500, this)">12500</button>
+                <button class="amt-btn" onclick="selectAmount(24000, this)">24000</button>
+            </div>
+
+            <input type="number" id="deposit-input" class="custom-input" value="500">
+
+            <div style="border:1px solid #333; padding:10px; border-radius:5px; margin-bottom:20px; display:flex; align-items:center; gap:10px;">
+                 <div style="width:16px; height:16px; background:#2d5687; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 2px #2d5687;"></div>
+                 <span>ගෙවීමේ ක්‍රමය 1</span>
+            </div>
+
+            <button class="pay-btn" onclick="handlePayment()">ගෙවීම</button>
+
+            <div class="notes">
+                <p>සටහන: ටොප්-අප් උපදෙස්...</p>
+                <p>1. අවම ටොප්-අප් මුදල ශ්‍රී ලංකා රුපියල් 500 කි.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 7. BANK TRANSFER PAGE ================= -->
+    <div id="page-bank" class="page">
+        <div class="bank-header">
+            <i class="fa-solid fa-xmark" onclick="openPage('deposit')" style="font-size:1.2rem; cursor:pointer;"></i>
+            <span>Payment Details</span>
+            <i class="fa-solid fa-share-nodes"></i>
+        </div>
+        <div class="section-pad">
+            <div class="warning-box">
+                <i class="fa-solid fa-circle-exclamation"></i> Warning<br>
+                Please make payment to the account number below.
+            </div>
+
+            <div class="bank-details">
+                <div class="bd-row">
+                    <span>Account Title</span>
+                    <span class="bd-val">S M A S L Manchanayake <i class="fa-regular fa-copy copy-btn-sm" onclick="copyText('S M A S L Manchanayake')"></i></span>
+                </div>
+                <div class="bd-row">
+                    <span>Bank Account</span>
+                    <span class="bd-val">300121287807 <i class="fa-regular fa-copy copy-btn-sm" onclick="copyText('300121287807')"></i></span>
+                </div>
+                <div class="bd-row">
+                    <span>Bank Name</span>
+                    <span class="bd-val">National Saving Bank <i class="fa-regular fa-copy copy-btn-sm"></i></span>
+                </div>
+                <div class="bd-row">
+                    <span>Branch</span>
+                    <span class="bd-val">Katunayake <i class="fa-regular fa-copy copy-btn-sm"></i></span>
+                </div>
+                <div class="bd-row">
+                    <span>Amount</span>
+                    <span class="bd-val" style="color:var(--green);">
+                        <span id="bank-amount-display">500</span> <i class="fa-regular fa-copy copy-btn-sm"></i>
+                    </span>
+                </div>
+                <div class="bd-row" style="border:none;">
+                    <span>Countdown</span>
+                    <span class="bd-val" style="color:#555;" id="bank-timer">29:55</span>
+                </div>
+            </div>
+
+            <div style="margin-top:15px;">
+                <div style="color:var(--gold); font-weight:bold; margin-bottom:5px;"><i class="fa-solid fa-hand-point-right"></i> payment voucher</div>
+                <div class="upload-area" onclick="document.getElementById('voucher-file').click()">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:2rem; color:#ccc;"></i>
+                    <input type="file" id="voucher-file" style="display:none" onchange="document.querySelector('.confirm-btn').classList.add('active')">
+                </div>
+            </div>
+
+            <button class="confirm-btn">Confirm</button>
+        </div>
+    </div>
+
+    <!-- ================= 8. WITHDRAW PAGE ================= -->
+    <div id="page-withdraw" class="page">
+        <div class="blue-header">
+            <i class="fa-solid fa-chevron-left" onclick="openPage('home')"></i>
+            ආපසු
+        </div>
+        <div class="section-pad">
+            <div class="withdraw-card">
+                <label class="form-label">කරුණාකර මුදල් ආපසු ගැනීමේ බැංකුව තෝරන්න</label>
+                <select class="form-field">
+                    <option>Bank of Ceylon</option>
+                    <option>Peoples Bank</option>
+                    <option>HNB</option>
+                </select>
+
+                <label class="form-label">නම</label>
+                <input type="text" class="form-field" placeholder="කරුණාකර ඔබේ නම ඇතුළත් කරන්න">
+
+                <label class="form-label">බැංකු ගිණුම් අංකය</label>
+                <input type="text" class="form-field" placeholder="කරුණාකර ඔබේ බැංකු ගිණුම් අංකය ඇතුළත් කරන්න">
+            </div>
+            
+            <button class="black-action-btn">එක් කරන්න</button>
+        </div>
+    </div>
+
+    <!-- ================= 9. RECORDS PAGE ================= -->
+    <div id="page-records" class="page">
+        <div class="blue-header">
+            <i class="fa-solid fa-chevron-left" onclick="openPage('profile')"></i>
+            බැලැන්ස් විස්තර
+        </div>
+        <div>
+            <div class="rec-item">
+                <div>
+                    <div class="rec-title">නිෂ්පාදනය මිලදී ගන්න</div>
+                    <div class="rec-date">22-11-2025 15:28:58</div>
+                </div>
+                <div>
+                    <div class="rec-amt minus">- 10.00</div>
+                    <div class="rec-bal minus">බැලැන්ස් 0.0000</div>
+                </div>
+            </div>
+
+            <div class="rec-item">
+                <div>
+                    <div class="rec-title">ලියාපදිංචි ප්‍රසාද දීමනාව</div>
+                    <div class="rec-date">22-11-2025 15:28:28</div>
+                </div>
+                <div>
+                    <div class="rec-amt plus">+ 10.00</div>
+                    <div class="rec-bal plus">බැලැන්ස් 10.0000</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOADING MODAL -->
+    <div id="modal-loading" class="modal-overlay">
+        <div class="loading-box">Please wait.</div>
+    </div>
+
+    <!-- ================= BOTTOM NAVIGATION ================= -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="openPage('home')">
+            <i class="fa-solid fa-house"></i><span>මුල් පිටුව</span>
+        </div>
+        <div class="nav-item" onclick="openPage('production')">
+            <i class="fa-solid fa-circle-dollar-to-slot"></i><span>නිෂ්පාදනය</span>
+        </div>
+        <div class="nav-item" onclick="openPage('share')">
+            <i class="fa-solid fa-share"></i><span>බෙදාගන්න</span>
+        </div>
+        <div class="nav-item" onclick="openPage('profile')">
+            <i class="fa-regular fa-user"></i><span>මගේ</span>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Global State
+    let currentDepositAmount = 500;
+
+    // Page Navigation Logic
+    function openPage(pageId) {
+        // 1. Hide all pages
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        
+        // 2. Show target page
+        const target = document.getElementById('page-' + pageId);
+        if(target) target.classList.add('active');
+        window.scrollTo(0,0);
+
+        // 3. Update Bottom Nav
+        const navs = document.querySelectorAll('.nav-item');
+        navs.forEach(n => n.classList.remove('active'));
+        
+        // Logic for highlighting correct nav icon
+        if(['home', 'deposit', 'withdraw', 'service', 'bank'].includes(pageId)) {
+            navs[0].classList.add('active');
+        } else if(pageId === 'production') {
+            navs[1].classList.add('active');
+        } else if(pageId === 'share') {
+            navs[2].classList.add('active');
+        } else if(['profile', 'records'].includes(pageId)) {
+            navs[3].classList.add('active');
+        }
+    }
+
+    // Deposit Logic
+    function selectAmount(amount, btn) {
+        currentDepositAmount = amount;
+        document.querySelectorAll('.amt-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        document.getElementById('deposit-input').value = amount;
+    }
+
+    function handlePayment() {
+        const modal = document.getElementById('modal-loading');
+        modal.style.display = 'flex';
+        
+        // Sync amount to bank page
+        document.getElementById('bank-amount-display').innerText = document.getElementById('deposit-input').value;
+        
+        setTimeout(() => {
+            modal.style.display = 'none';
+            openPage('bank');
+            startTimer();
+        }, 1500);
+    }
+
+    // Bank Timer Logic
+    let timerInterval;
+    function startTimer() {
+        let duration = 1795; // 29m 55s
+        const display = document.getElementById('bank-timer');
+        
+        if(timerInterval) clearInterval(timerInterval);
+        
+        timerInterval = setInterval(() => {
+            let m = Math.floor(duration / 60);
+            let s = duration % 60;
+            display.textContent = (m < 10 ? "0"+m : m) + ":" + (s < 10 ? "0"+s : s);
+            
+            if (--duration < 0) clearInterval(timerInterval);
+        }, 1000);
+    }
+
+    // Utility
+    function copyText(text) {
+        // Simple alert simulation
+        alert("Copied: " + text);
+    }
+</script>
+
+</body>
+</html>    font-size: 14px;
   }
   .blue-bar {
     background-color: blue;
