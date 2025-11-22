@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Button Web Page</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  .notification {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  .notification img {
+    width: 24px;
+    margin-right: 8px;
+  }
+  .button-row {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+  }
+  .btn {
+    text-align: center;
+    cursor: pointer;
+  }
+  .btn img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 6px;
+  }
+  .btn span {
+    font-size: 14px;
+  }
+  .blue-bar {
+    background-color: blue;
+    height: 40px;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+  .logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+  }
+  .logos img {
+    max-height: 40px;
+    cursor: pointer;
+  }
+  .bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ddd;
+    padding: 10px 0;
+  }
+  .bottom-nav .nav-btn {
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .bottom-nav .nav-btn img {
+    width: 25px;
+    height: 25px;
+    display: block;
+    margin: 0 auto 4px;
+  }
+  .bottom-nav .active {
+    background-color: #aaa;
+    border-radius: 8px;
+    padding: 5px 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="notification">
+  <img src="https://img.icons8.com/ios-glyphs/30/0000ff/appointment-reminders.png" alt="Notification" />
+  16 පුරවන්න LKR 2500
+</div>
+
+<div class="button-row">
+  <div class="btn" onclick="alert('තැන්පතු clicked')">
+    <img src="https://img.icons8.com/ios/50/0000ff/wallet--v1.png" alt="Wallet" />
+    <span>තැන්පතු</span>
+  </div>
+  <div class="btn" onclick="alert('ආපසු ගැණීම clicked')">
+    <img src="https://img.icons8.com/ios/50/0000ff/cash-in-hand.png" alt="Cash" />
+    <span>ආපසු ගැණීම</span>
+  </div>
+  <div class="btn" onclick="alert('උදව් clicked')">
+    <img src="https://img.icons8.com/ios/50/0000ff/help.png" alt="Help" />
+    <span>උදව්</span>
+  </div>
+  <div class="btn" onclick="alert('බාගැනීම clicked')">
+    <img src="https://img.icons8.com/ios/50/0000ff/download-box.png" alt="Download" />
+    <span>බාගැනීම</span>
+  </div>
+  <div class="btn" onclick="alert('ඇතුළු වීම clicked')">
+    <img src="https://img.icons8.com/ios/50/0000ff/task.png" alt="Task" />
+    <span>ඇතුළු වීම</span>
+  </div>
+</div>
+
+<div class="blue-bar"></div>
+
+<div class="logos">
+  <img src="https://seeklogo.com/images/B/binance-logo-4864F0F242-seeklogo.com.png" alt="Binance" title="Binance" />
+  <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="Ethereum" title="Ethereum" style="height:30px;filter: grayscale(100%) brightness(0.7);" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Bitmain_logo.svg" alt="Bitmain" title="Bitmain" style="height:30px;" />
+  <img src="https://cryptologos.cc/logos/tron-trx-logo.png" alt="Tron" title="Tron" />
+  <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="Tether" title="Tether" />
+  <img src="https://cryptologos.cc/logos/coinbase-coin-logo.png" alt="Coinbase" title="Coinbase" />
+  <img src="https://cryptologos.cc/logos/huobi-token-ht-logo.png" alt="Huobi" title="Huobi" />
+  <img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png" alt="Dogecoin" title="Dogecoin" />
+  <img src="https://coindcx.com/static/web/images/red_logo.svg" alt="CoinDCX" title="CoinDCX" style="height:30px;" />
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-btn active" onclick="alert('මුල් පිටුව clicked')">
+    <img src="https://img.icons8.com/ios-filled/50/0000ff/home.png" alt="Home" />
+    මුල් පිටුව
+  </div>
+  <div class="nav-btn" onclick="alert('නිෂ්පාදන clicked')">
+    <img src="https://img.icons8.com/ios/50/0000ff/money.png" alt="Products" />
+    නිෂ්පාදන
+  </div>
+  <div class="nav-btn" onclick="alert('බෙදාහරින්න clicked')">
+    <img src="https://img.icons8.com/ios/50/0000ff/share-rounded.png" alt="Share" />
+    බෙදාහරින්න
+  </div>
+  <div class="nav-btn" onclick="alert('මගේ clicked')">
+    <img src="https://img.icons8.com/ios/50/0000ff/user.png" alt="Profile" />
+    මගේ
+  </div>
+</div>
+
+</body>
+</html>
